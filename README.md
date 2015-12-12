@@ -4,10 +4,10 @@ This is the xmonad configuration which integrates xfce4 with xmonad. This config
 
 [The `\retired` is my previous configurations for using xmonad with taffybar.]
 
-## Usage ( `W-Windows, S-shift, A-Alt, C-Ctrl` )
+## Usage
 
 - There are 2 workspaces. Editors and terminals are put in the 1st workspace by default,
-and file manager and web browser are put in the 2nd workspace.
+and file manager and web browser are put in the 2nd workspace.  `(W-Windows, S-shift, A-Alt, C-Ctrl)`
 
 ```
     W - comma   : go to workspace 0
@@ -50,7 +50,7 @@ In the `tile` mode, more windows (4 by default, can be changed by `W-M/W-S-M`) c
 - You can put some windows on both workspaces (`W - Tab : cycling the windows`), and try to use the following key bindings.
 
 
-##Key Bindings ( `W-Windows, S-shift, A-Alt, C-Ctrl` )
+##Key Bindings
 
 |         Key Binding       | Action                                                                           |
 |:--------------------------|:---------------------------------------------------------------------------------|
