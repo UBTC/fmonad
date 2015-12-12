@@ -176,9 +176,9 @@ myCommands = defaultCommands
 ------------------------------------------------------------------------
 --
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
-    [ ((modm, xK_Tab), windows W.focusDown) -- cycling the windows
+    [ ((modm, xK_Tab), windows W.focusDown)
     , ((modm .|. shiftMask, xK_Tab), windows W.focusUp)
-    , ((modm, xK_q), nextMatch History (return True)) -- return to the most recent window
+    , ((modm, xK_q), nextMatch History (return True))
     , ((modm .|. shiftMask, xK_q), windows W.swapUp)
     , ((modm, xK_Escape), goToSelected myGSconfig)
 
@@ -186,7 +186,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. shiftMask, xK_a), shiftToNext >> nextWS)
 
     , ((modm, xK_s), runOrRaiseNext myTerminal0 (className =? (myTerminal0) <||> className =? upperSHead (myTerminal0) <||> className =? myTerminal1 <||> className =? upperSHead myTerminal1 <||> className =? myTerminal2 <||> className =? upperSHead myTerminal2 <||> className =? myTerminal3 <||> className =? upperSHead myTerminal3 <||> className =? myTerminal4 <||> className =? upperSHead myTerminal4 <||> className =? (myTerminal5++"-256color") <||> className =? upperSHead (myTerminal5++"-256color")) >> (windows $ W.greedyView "#0"))
-    -- >> (windows $ W.swapMaster) >> (windows $ W.greedyView "#0")
     , ((modm, xK_d), runOrRaiseNext myEditor0 (className =? myEditor0 <||> className =? upperSHead myEditor0 <||> className =? myEditor1 <||> className =? upperSHead myEditor1 <||> className =? myEditor2 <||> className =? upperSHead myEditor2 <||> className =? myEditor3 <||> className =? upperSHead myEditor3 <||> className =? myEditor4 <||> className =? upperSHead myEditor4) >> (windows $ W.greedyView "#0"))
     , ((modm, xK_f), runOrRaiseNext myFileManager0 (className =? myFileManager0 <||> className =? upperSHead myFileManager0 <||> className =? myFileManager1 <||> className =? upperSHead myFileManager1 <||> className =? myFileManager2 <||> className =? upperSHead myFileManager2 <||> className =? myFileManager3 <||> className =? upperSHead myFileManager3 <||> className =? myFileManager4 <||> className =? upperSHead myFileManager4) >> (windows $ W.greedyView "#1"))
     , ((modm, xK_g), runOrRaiseNext myBrowser0 (className =? myBrowser0 <||> className =? upperSHead myBrowser0 <||> className =? myBrowser1 <||> className =? upperSHead myBrowser1 <||> className =? myBrowser2 <||> className =? upperSHead myBrowser2 <||> className =? myBrowser3 <||> className =? upperSHead myBrowser3 <||> className =? myBrowser4 <||> className =? upperSHead myBrowser4 <||> className =? myBrowser5 <||> className =? upperSHead myBrowser5) >> (windows $ W.greedyView "#1"))
@@ -195,28 +194,27 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. shiftMask, xK_f), (spawn myFileManager0) >> (windows $ W.greedyView "#1"))
     , ((modm .|. shiftMask, xK_g), (spawn myBrowser0) >> (windows $ W.greedyView "#1"))
 
-    , ((modm, xK_z), gotoMenu >> windows W.swapMaster) -- bring a window to master
+    , ((modm, xK_z), gotoMenu >> windows W.swapMaster)
     , ((modm .|. shiftMask, xK_z), windows W.swapUp >> windows W.focusDown)
---    , ((modm .|. shiftMask, xK_z), windows W.swapDown >> windows W.focusUp) -- return to the most recent window, another way
-    , ((modm, xK_x), spawn myCLILauncher) -- launcher
+    , ((modm, xK_x), spawn myCLILauncher)
     , ((modm .|. shiftMask, xK_x), spawn myTermLauncher)
-    , ((modm, xK_c), myCommands >>= runCommand) -- window switcher
---    , ((modm, xK_c), spawn myGUILauncher) -- bring a window to master
-    , ((modm .|. shiftMask, xK_c), XMonad.kill) -- kill the focused window
+    , ((modm, xK_c), myCommands >>= runCommand)
+--    , ((modm, xK_c), spawn myGUILauncher)
+    , ((modm .|. shiftMask, xK_c), XMonad.kill)
     , ((modm, xK_v), spawn myVolumeDecrease)
     , ((modm .|. shiftMask, xK_v), spawn myVolumeIncrease)
     , ((modm, xK_b), spawn myBrightDecrease)
     , ((modm .|. shiftMask, xK_b), spawn myBrightIncrease)
 
-    , ((modm, xK_space), sendMessage NextLayout) -- switch to the next layout
-    , ((modm, xK_p), warpToWindow (0.5) (0.5)) -- move the mouse pointer to the focused window
-    , ((modm, xK_semicolon), refresh) -- make the window to the correct size
-    , ((modm, xK_slash), changeDir myXPConfig) -- changing the current work Dir.
+    , ((modm, xK_space), sendMessage NextLayout)
+    , ((modm, xK_p), warpToWindow (0.5) (0.5))
+    , ((modm, xK_semicolon), refresh)
+    , ((modm, xK_slash), changeDir myXPConfig)
     , ((modm .|. shiftMask, xK_slash), AL.launchApp myXPConfig { defaultText = "~" } myFileManager0)
-    , ((modm, xK_grave), windows W.focusMaster) -- focus the master window --xK_Return
-    , ((modm .|. shiftMask, xK_grave), windows W.swapMaster) -- swap the focused window to master
+    , ((modm, xK_grave), windows W.focusMaster)
+    , ((modm .|. shiftMask, xK_grave), windows W.swapMaster)
 
-    , ((modm, xK_Left),  withFocused $ snapMove L Nothing) -- more floating keybindings
+    , ((modm, xK_Left),  withFocused $ snapMove L Nothing)
     , ((modm, xK_Right), withFocused $ snapMove R Nothing)
     , ((modm, xK_Up),    withFocused $ snapMove U Nothing)
     , ((modm, xK_Down),  withFocused $ snapMove D Nothing)
@@ -229,43 +227,43 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. shiftMask, xK_Up),    withFocused (keysResizeWindow (0, 100) (1,1)))
     , ((modm .|. shiftMask, xK_Down),  withFocused (keysResizeWindow (0,-100) (1,1)))
 
-    , ((modm, xK_w), withFocused $ float >> keysMoveWindowTo (175, 100) (0, 0)) -- float/restore the focused window
+    , ((modm, xK_w), withFocused $ float >> keysMoveWindowTo (175, 100) (0, 0))
     , ((modm .|. shiftMask, xK_w), withFocused $ windows . W.sink)
-    , ((modm, xK_e), withAll $ float >> keysMoveWindowTo (175, 100) (0, 0)) -- float/restore all windows
+    , ((modm, xK_e), withAll $ float >> keysMoveWindowTo (175, 100) (0, 0))
     , ((modm .|. shiftMask, xK_e), sinkAll)
-    , ((modm, xK_o), windows copyToAll) -- copy the focused window to all workspace (WS)
-    , ((modm .|. shiftMask, xK_o), killAllOtherCopies) -- kill the other copies
+    , ((modm, xK_o), windows copyToAll)
+    , ((modm .|. shiftMask, xK_o), killAllOtherCopies)
 
-    , ((modm, xK_t), sendMessage Expand) -- increase/decrease the size of the main area (tile mode) vvvvvvvvvv
+    , ((modm, xK_t), sendMessage Expand)
     , ((modm .|. shiftMask, xK_t), sendMessage Shrink)
-    , ((modm, xK_y), sendMessage ExpandSlave) -- increase/decrease the size of the current slave window (tile mode)
+    , ((modm, xK_y), sendMessage ExpandSlave)
     , ((modm .|. shiftMask, xK_y), sendMessage ShrinkSlave)
-    , ((modm, xK_r), sendMessage (IncMasterN 1)) -- increase/decrease the number of windows in main area (tile mode)
+    , ((modm, xK_r), sendMessage (IncMasterN 1))
     , ((modm .|. shiftMask, xK_r), sendMessage (IncMasterN(-1)))
-    , ((modm, xK_u), sendMessage $ Toggle REFLECTX) -- refect the windows x OR y directions (tile mode)
+    , ((modm, xK_u), sendMessage $ Toggle REFLECTX)
     , ((modm .|. shiftMask, xK_u), sendMessage $ Toggle REFLECTY)
-    , ((modm, xK_i), sendMessage $ Toggle MIRROR) -- switch the tile direction (tile mode)
+    , ((modm, xK_i), sendMessage $ Toggle MIRROR)
     , ((modm .|. shiftMask, xK_i), sendMessage $ Toggle MIRROR)
 
-    , ((modm, xK_h), sendMessage $ Go L) -- focus the window of the U/D/R/L directions (tile mode)
+    , ((modm, xK_h), sendMessage $ Go L)
     , ((modm, xK_j), sendMessage $ Go D)
     , ((modm, xK_k), sendMessage $ Go U)
     , ((modm, xK_l), sendMessage $ Go R)
-    , ((modm .|. shiftMask, xK_h), sendMessage $ Swap L) -- swap the focused window to the U/D/R/L directions (tile mode)
+    , ((modm .|. shiftMask, xK_h), sendMessage $ Swap L)
     , ((modm .|. shiftMask, xK_j), sendMessage $ Swap D)
     , ((modm .|. shiftMask, xK_k), sendMessage $ Swap U)
-    , ((modm .|. shiftMask, xK_l), sendMessage $ Swap R) -- ^^^^^^^^^^
+    , ((modm .|. shiftMask, xK_l), sendMessage $ Swap R)
 
-    , ((modm, xK_n), sendMessage $ Toggle FULL) -- make the focused window full (cover the title bar)
-    , ((modm .|. shiftMask, xK_n), sendMessage ToggleStruts) -- toggle the panel
-    , ((modm, xK_m), increaseLimit) -- change the number of windows that can be seen
+    , ((modm, xK_n), sendMessage $ Toggle FULL)
+    , ((modm .|. shiftMask, xK_n), sendMessage ToggleStruts)
+    , ((modm, xK_m), increaseLimit)
     , ((modm .|. shiftMask, xK_m), decreaseLimit)
-    , ((modm .|. shiftMask, xK_0), rescreen) -- leave only one pane per WS
+    , ((modm .|. shiftMask, xK_0), rescreen)
     , ((modm .|. controlMask, xK_0), rescreen)
     , ((modm, xK_0), spawn myScreenshoter)
     , ((modm, xK_minus), spawn myLocker)
 
-    , ((modm .|. controlMask .|. shiftMask, xK_Caps_Lock), io (exitWith ExitSuccess)) -- %! exit xmonad
+    , ((modm .|. controlMask .|. shiftMask, xK_Caps_Lock), io (exitWith ExitSuccess))
     ] ++ [
     ((m .|. modm .|. controlMask, key), screenWorkspace sc >>= flip whenJust (windows . f)) | (key, sc) <- zip [xK_comma, xK_period] [0, 1]
     , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]
@@ -383,10 +381,6 @@ myStartupHook = do
     spawnOnce "dropbox start" -- cloud storage
     spawnOnce "/opt/copy/CopyAgent" -- cloud storage
     spawnOnce "xautolock -time 5 -locker slock -nowlocker slock" -- autolocker
-    spawnOnce "mpv /home/mw/Copy/Music/login-sound/ubuntu11/desktop-login.ogg" -- login sound
--- setxkbmap -option ctrl:swapcaps -- swap caps and ctrl
--- bash -c "LC_CTYPE=zh_CN.utf8 emacs --daemon" -- run an emacs daemon
--- xrandr -o left -- left the left side be the top of image
 
 ------------------------------------------------------------------------
 --
@@ -426,4 +420,3 @@ main = do
         , logHook = myLogHook >> dbusLogWithPP client myTaffybarPP >> historyHook
         , startupHook = myStartupHook
         }
--- 404 NOT FOUND

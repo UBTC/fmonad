@@ -400,7 +400,6 @@ myStartupHook = do
     spawnOnce "keynav" -- keyboard-driven mouse cursor mover
     spawnOnce "megasync" -- cloud storage
     spawnOnce "xautolock -time 5 -locker slock -nowlocker slock" -- autolocker
-    spawnOnce "mpv /home/mw/MEGAsync/Music/login-sound/ubuntu11/desktop-login.ogg" -- login sound
 
 ------------------------------------------------------------------------
 -- Now run Xmonad with all the configurations we set up.
@@ -422,3 +421,5 @@ main = do
         , logHook = myLogHook >> historyHook
         , startupHook = myStartupHook
         }
+--
+-- 404 NOT FOUND
