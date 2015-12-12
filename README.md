@@ -1,12 +1,12 @@
 # FMONAD --- integrates xfce4 with xmonad
 
-This is the xmonad configuration which integrates xfce4 with xmonad.
-This configuration is a mature and handy xmonad, and has been used heavily for a few years.
+This is the xmonad configuration which integrates xfce4 with xmonad. This configuration is a mature and handy xmonad, and has been used heavily for a few years.
+
 [The `\retired` is my previous configurations for using xmonad with taffybar.]
 
 ## Usage ( `W-Windows, S-shift, A-Alt, C-Ctrl` )
 
-1. There are 2 workspaces. Editors and terminals are put in the 1st workspace by default,
+- There are 2 workspaces. Editors and terminals are put in the 1st workspace by default,
 and file manager and web browser are put in the 2nd workspace.
 
 ```
@@ -16,11 +16,11 @@ and file manager and web browser are put in the 2nd workspace.
     WS - period : send the window to workspace 1
 ```
 
-2. There are 2 layouts, i.e., `tab` and `tile`. In the tab mode, there is only 1 window can be observed.
+- There are 2 layouts, i.e., `tab` and `tile`. In the tab mode, there is only 1 window can be observed.
 In the `tile` mode, more windows (4 by default, can be changed by `W-M/W-S-M`) can be observed.
    `W - space : switch to the next layout`
 
-3. Two panes are engaged in both layout modes, with each pane being the view of a workspace.
+- Two panes are engaged in both layout modes, with each pane being the view of a workspace.
 
 ```
     WC - 1..9 : devide screens to left and right two panes
@@ -29,7 +29,7 @@ In the `tile` mode, more windows (4 by default, can be changed by `W-M/W-S-M`) c
     WA - 0    : leave only one pane per WS
 ```
 
-4. The whole layout can be reflect in different directions in the tile mode.
+- The whole layout can be reflect in different directions in the tile mode.
 
 ```
     W - u  : refect the windows x directions
@@ -38,7 +38,7 @@ In the `tile` mode, more windows (4 by default, can be changed by `W-M/W-S-M`) c
     WS - y : restore the tile direction
 ```
 
-5. Run command and kill application with `W-z` and `WS-c`:
+- Run command and kill application with `W-z` and `WS-c`:
 
 ```
     W - z  : run a command
@@ -47,7 +47,7 @@ In the `tile` mode, more windows (4 by default, can be changed by `W-M/W-S-M`) c
     WS - c : kill the focused window
 ```
 
-6. You can put some windows on both workspaces (`W - Tab : cycling the windows`), and try to use the following key bindings.
+- You can put some windows on both workspaces (`W - Tab : cycling the windows`), and try to use the following key bindings.
 
 
 ##Key Bindings ( `W-Windows, S-shift, A-Alt, C-Ctrl` )
