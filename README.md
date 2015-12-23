@@ -1,4 +1,4 @@
-# FMONAD
+# MONADIC
 
 This is my xmonad configuration. The core of this configuration is mature and handy, and has been heavily used for years.
 
