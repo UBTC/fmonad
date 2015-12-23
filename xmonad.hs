@@ -291,7 +291,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     ] ++ [
     ((modm, k), focusNth i) | (i, k) <- zip [1 .. 9] [xK_1 .. xK_9]
     ] ++ [
-    ((modm .|. shiftMaster, k), swapNth i) | (i, k) <- zip [1 .. 9] [xK_1 .. xK_9]
+--  ((modm .|. shiftMaster, k), swapNth i) | (i, k) <- zip [1 .. 9] [xK_1 .. xK_9]
     ] ++ [
     ((modm .|. mod1Mask, k), layoutScreens 2 (Mirror (TwoPane (i/10) (1-i/10)))) | (i, k) <- zip [1 .. 9] [xK_1 .. xK_9]
     ] ++ [
@@ -341,7 +341,7 @@ myManageHook = composeAll . concat $
       , isDialog --> doCenterFloat
       , (resource =? "desktop_window") --> doIgnore
       , (resource =? "kdesktop") --> doIgnore
---    , (resource =? "xfdesktop") --> doIgnore
+      , (resource =? "xfdesktop") --> doIgnore
       , (resource =? "dialog") --> doFloat
       , (resource =? "xfce4-panel") --> doFloat
       , (resource  =? "gcr-prompter") --> doCenterFloat
@@ -362,7 +362,7 @@ myManageHook = composeAll . concat $
     simpleFloat = ["gtk-recordMyDesktop", "MPlayer", "gimp", "skype"]
     centerFloat = ["Xfce4-appfinder", "Xfrun4", "feh", "wrapper", "xmessage", "synaptic", "taffybar-linux-x86_64"]
     browser = ["Firefox", "Midori", "Chromium Browser", "google-chrome", "Opera", "X-www-browser", "Tor Browser"]
-    editor = ["Gvim", "Emacs24", "Kate", "Gedit", "Geany", "Emacs", "Atom", "Neovim"]
+    editor = ["Gvim", "Emacs24", "Kate", "Gedit", "Geany", "Emacs", "Atom", "Neovim",  "Yi-linux-x86_64"]
     filemanager = ["Spacefm", "Thunar", "Pcmanfm", "Nautilus", "Dolphin", "File"]
     play = ["Rhythmbox","Gwibber", "Empathy", "Pidgin", "SuperTuxKart"] ++ simpleFloat
     reader = ["Zathura", "Okular", "Evince", "mupdf", "xpdf"]
@@ -397,12 +397,14 @@ myStartupHook = do
     spawnOnce "xfce4-power-manager" -- power manager
     spawnOnce "xsetroot -solid black -cursor_name left_ptr" -- desktop background & mouse pointer
     spawnOnce "pactl set-sink-volume 0 '10%'" -- volume
-    spawnOnce "xfce4-panel" -- the panel
+--  spawnOnce "xfce4-panel" -- the panel
+    spawnOnce "tint2" -- the panel
     spawnOnce "skype" -- keep in touch
-    spawnOnce "keynav" -- keyboard-driven mouse cursor mover
+--  spawnOnce "keynav" -- keyboard-driven mouse cursor mover
     spawnOnce "megasync" -- cloud storage
     spawnOnce "xautolock -time 5 -locker slock -nowlocker slock" -- autolocker
-    spawnOnce "mpv /home/mw/MEGAsync/Music/login-sound/ubuntu11/desktop-login.ogg" -- login sound
+    spawnOnce "play /home/mw/MEGAsync/Music/login-sound/ubuntu11/desktop-login.ogg" -- login sound
+--  spawn eamcs as daemon???
 
 ------------------------------------------------------------------------
 -- Now run Xmonad with all the configurations we set up.
