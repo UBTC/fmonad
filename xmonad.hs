@@ -291,6 +291,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     ] ++ [
     ((modm, k), focusNth i) | (i, k) <- zip [1 .. 9] [xK_1 .. xK_9]
     ] ++ [
+    ((modm .|. shiftMaster, k), swapNth i) | (i, k) <- zip [1 .. 9] [xK_1 .. xK_9]
+    ] ++ [
     ((modm .|. mod1Mask, k), layoutScreens 2 (Mirror (TwoPane (i/10) (1-i/10)))) | (i, k) <- zip [1 .. 9] [xK_1 .. xK_9]
     ] ++ [
     ((modm .|. controlMask, k), layoutScreens 2 (TwoPane (i/10) (1-i/10))) | (i, k) <- zip [1 .. 9] [xK_1 .. xK_9]
@@ -339,7 +341,7 @@ myManageHook = composeAll . concat $
       , isDialog --> doCenterFloat
       , (resource =? "desktop_window") --> doIgnore
       , (resource =? "kdesktop") --> doIgnore
-      , (resource =? "xfdesktop") --> doIgnore
+--    , (resource =? "xfdesktop") --> doIgnore
       , (resource =? "dialog") --> doFloat
       , (resource =? "xfce4-panel") --> doFloat
       , (resource  =? "gcr-prompter") --> doCenterFloat
@@ -387,7 +389,7 @@ myLogHook = do
 myStartupHook = do
     ewmhDesktopsStartup
     startupHook desktopConfig
-    {-spawnOnce "setxkbmap -option caps:swapescape" -- swap caps and esc-}
+    spawnOnce "setxkbmap -option caps:swapescape" -- swap caps and esc
     {-spawnOnce "xrandr --output eDP1 --right-of DP2 --auto" -- two screens-}
     spawnOnce "nm-applet" -- network monitor
     spawnOnce "fcitx-autostart" -- input Chinese
@@ -400,6 +402,7 @@ myStartupHook = do
     spawnOnce "keynav" -- keyboard-driven mouse cursor mover
     spawnOnce "megasync" -- cloud storage
     spawnOnce "xautolock -time 5 -locker slock -nowlocker slock" -- autolocker
+    spawnOnce "mpv /home/mw/MEGAsync/Music/login-sound/ubuntu11/desktop-login.ogg" -- login sound
 
 ------------------------------------------------------------------------
 -- Now run Xmonad with all the configurations we set up.

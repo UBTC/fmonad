@@ -1,8 +1,32 @@
-# FMONAD --- integrates xfce4 with xmonad
+# FMONAD
 
-This is the xmonad configuration that integrates xfce4 with xmonad. The core of this configuration is mature and handy, and has been used heavily for years.
+This is my xmonad configuration. The core of this configuration is mature and handy, and has been heavily used for years.
 
-[The `\retired` is my previous configurations for using xmonad with taffybar.]
+[The `\retired` is my previous configuration for using xmonad with taffybar.]
+
+## Installation
+
+1. Install the required applications:
+
+    `xmonad, xfce4-desktop, firefox`, and [suckless-tools](http://tools.suckless.org), [neovim](https://neovim.io/), [fish](http://fishshell.com/).
+
+2. Backup the previous configurations:
+
+    `mv ~/.xmonad ~/.xmonad.backup`
+
+3. Clone this configuration:
+
+    `git clone 'https://github.com/mogeiwang/fmonad' ~/.xmonad`
+
+4. Recompile xmonad:
+
+    `xmonad --recompile`
+
+5. Restart xmonad:
+
+    `xmonad --restart`
+
+6. That's all, have fun!
 
 ## Basic features and usage
 
@@ -124,6 +148,7 @@ To change the layout mode: `W - space : switch to the next layout`
 | WS - comma                | send the window to workspace 0                                                   |
 | WS - period               | send the window to workspace 1                                                   |
 | W - 1..9                  | choose the (i+1)-th window, press grave for the first window                     |
+| WS - 1..9                 | swap the current window to the (i+1)-th position                                 |
 | WC - 1..9                 | devide screens to left and right two panes                                       |
 | WA - 1..9                 | devide screens to up and down two panes                                          |
 | WC - 0                    | leave only one pane per WS                                                       |
@@ -133,27 +158,3 @@ To change the layout mode: `W - space : switch to the next layout`
 | W - Left_mouse_button     | move window                                                                      |
 | W - Middle_mouse_button   | sink all windows, and swap the clicked window to master                          |
 | W - Right_mouse_button    | resize window                                                                    |
-
-## Installation
-
-1. Install the required applications:
-
-    `xmonad, xfce4-desktop, firefox`, and [suckless-tools](http://tools.suckless.org), [neovim](https://neovim.io/), [fish](http://fishshell.com/).
-
-2. Backup the previous configurations:
-
-    `mv ~/.xmonad ~/.xmonad.backup`
-
-3. Clone this configuration:
-
-    `git clone 'https://github.com/mogeiwang/fmonad' ~/.xmonad`
-
-4. Recompile xmonad:
-
-    `xmonad --recompile`
-
-5. Restart xmonad:
-
-    `xmonad --restart`
-
-6. That's all, have fun!
