@@ -283,6 +283,12 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((0, xF86XK_Sleep), confirmPrompt myXPConfig "SUSPEND" $ spawn ("gksudo pm-suspend"))
     , ((shiftMask, xF86XK_Sleep), confirmPrompt myXPConfig "HIBERNATE" $ spawn ("gksudo pm-hibernate"))
     ] ++ [
+    ((m .|. modm .|. controlMask, key), screenWorkspace sc >>= flip whenJust (windows . f)) | (key, sc) <- zip [xK_Left, xK_Right] [0, 1],
+    (f, m) <- [(W.view, 0), (W.shift, shiftMask)]
+    ] ++ [
+    ((m .|. modm, key), windows $ f i) | (i, key) <- zip (XMonad.workspaces conf) ([xK_Left, xK_Right]),
+    (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]
+    ] ++ [
     ((m .|. modm .|. controlMask, key), screenWorkspace sc >>= flip whenJust (windows . f)) | (key, sc) <- zip [xK_comma, xK_period] [0, 1],
     (f, m) <- [(W.view, 0), (W.shift, shiftMask)]
     ] ++ [
