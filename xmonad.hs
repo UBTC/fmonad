@@ -280,8 +280,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((0, xK_Print), spawn myScreenshoter)
 
     , ((modm .|. controlMask .|. shiftMask, xK_Escape), confirmPrompt myXPConfig "LOGOUT" $ io (exitWith ExitSuccess)) -- xK_Caps_Lock
-    , ((0, xF86XK_Sleep), confirmPrompt myXPConfig "SUSPEND" $ spawn ("gksudo pm-suspend"))
-    , ((shiftMask, xF86XK_Sleep), confirmPrompt myXPConfig "HIBERNATE" $ spawn ("gksudo pm-hibernate"))
+    , ((0, xF86XK_Sleep), spawn ("gksudo pm-suspend"))
+    , ((shiftMask, xF86XK_Sleep), spawn ("gksudo pm-hibernate"))
     ] ++ [
     ((m .|. modm .|. controlMask, key), screenWorkspace sc >>= flip whenJust (windows . f)) | (key, sc) <- zip [xK_Left, xK_Right] [0, 1],
     (f, m) <- [(W.view, 0), (W.shift, shiftMask)]
