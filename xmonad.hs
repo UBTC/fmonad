@@ -151,7 +151,7 @@ myVolumeUnmute = "amixer -D pulse sset Master 30%"
 myBrightDecrease = "xbacklight -10%"
 myBrightIncrease = "xbacklight +5%"
 myHeight = 18
-myFont = "xft:WenQuanYi Zen Hei Mono:Bold:pixelsize=15:antialias=true:autohint=true"
+myFont = "xft:WenQuanYi Zen Hei Mono:Bold:pixelsize=12:antialias=true:autohint=true"
 myTermEdTitle = "-c " ++ myEditor0 ++ " -T " ++ myEditor0 ++ " -f 'Liberation Mono:pixelsize=15:antialias=true:autohint=true' "
 myTermEditor = mySh ++ " -c " ++ myEditor0
 myXPConfig = defaultXPConfig
@@ -179,16 +179,15 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. shiftMask, xK_Tab), windows W.focusUp)
     , ((modm, xK_q), windows W.swapUp)
     , ((modm .|. shiftMask, xK_q), windows W.swapDown)
-    , ((modm, xK_w), nextWS)
-    , ((modm .|. shiftMask, xK_w), shiftToNext >> nextWS)
-    , ((modm, xK_Escape), refresh)
-    , ((modm .|. shiftMask, xK_Escape), sinkAll)
-    , ((modm, xK_p), withFocused $ float >> keysMoveWindowTo (175, 100) (0, 0))
-    , ((modm .|. shiftMask, xK_p), withFocused $ windows . W.sink)
-    , ((modm .|. shiftMask, xK_b), windows copyToAll)
-    , ((modm, xK_b), killAllOtherCopies)
-    , ((modm .|. shiftMask, xK_v), withFocused minimizeWindow)
-    , ((modm, xK_v), sendMessage RestoreNextMinimizedWin)
+
+    , ((modm, xK_semicolon), windows copyToAll)
+    , ((modm .|. shiftMask, xK_semicolon), killAllOtherCopies)
+    , ((modm, xK_w), sinkAll)
+    , ((modm .|. shiftMask, xK_w), withFocused $ windows . W.sink)
+    , ((modm, xK_i), sendMessage RestoreNextMinimizedWin)
+    , ((modm .|. shiftMask, xK_i), withFocused minimizeWindow)
+    , ((modm, xK_p), warpToWindow (0.5) (0.5))
+    , ((modm .|. shiftMask, xK_p), refresh)
 
     , ((modm, xK_a), runOrRaisePrompt myXPConfig)
     , ((modm .|. shiftMask, xK_a), dwmpromote)
@@ -212,14 +211,14 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     , ((modm, xK_z), spawn myCLILauncher)
     , ((modm .|. shiftMask, xK_z), spawn myGUILauncher)
-    , ((modm, xK_x), gotoMenu >> windows W.swapMaster)
-    , ((modm .|. shiftMask, xK_x), nextMatch History (return True))
+    , ((modm, xK_x), nextWS)
+    , ((modm .|. shiftMask, xK_x), shiftToNext >> nextWS)
     , ((modm, xK_c), myCommands >>= runCommand)
     , ((modm .|. shiftMask, xK_c), XMonad.kill)
-    , ((modm, xK_i), spawn myVolumeDecrease)
-    , ((modm .|. shiftMask, xK_i), spawn myVolumeIncrease)
-    , ((modm, xK_o), spawn myBrightDecrease)
-    , ((modm .|. shiftMask, xK_o), spawn myBrightIncrease)
+    , ((modm, xK_v), spawn myVolumeDecrease)
+    , ((modm .|. shiftMask, xK_v), spawn myVolumeIncrease)
+    , ((modm, xK_b), spawn myBrightDecrease)
+    , ((modm .|. shiftMask, xK_b), spawn myBrightIncrease)
 
     , ((0, xF86XK_ScreenSaver), spawn myLocker)
     , ((0, xF86XK_Eject), spawn "eject")
@@ -233,12 +232,13 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((0, xF86XK_MonBrightnessUp), spawn myBrightIncrease)
 
     , ((modm, xK_space), sendMessage NextLayout)
-    , ((modm, xK_semicolon), warpToWindow (0.5) (0.5))
-    , ((modm, xK_slash), changeDir myXPConfig)
-    , ((modm .|. shiftMask, xK_slash), AL.launchApp myXPConfig { defaultText = "~" } myFileManager0)
+    , ((modm, xK_o), changeDir myXPConfig)
+    , ((modm .|. shiftMask, xK_o), AL.launchApp myXPConfig { defaultText = "~" } myFileManager0)
     , ((modm, xK_grave), windows W.focusMaster)
     , ((modm .|. shiftMask, xK_grave), windows W.swapMaster)
 
+    , ((modm, xK_Right), gotoMenu >> windows W.swapMaster)
+    , ((modm, xK_Left), nextMatch History (return True))
     , ((modm .|. shiftMask, xK_Left),  withFocused (keysMoveWindow (-150,   0)))
     , ((modm .|. shiftMask, xK_Right), withFocused (keysMoveWindow ( 150,   0)))
     , ((modm .|. shiftMask, xK_Up),    withFocused (keysMoveWindow (   0,-100)))
@@ -284,12 +284,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. controlMask .|. shiftMask, xK_Escape), confirmPrompt myXPConfig "LOGOUT" $ io (exitWith ExitSuccess)) -- xK_Caps_Lock
     , ((0, xF86XK_Sleep), spawn ("gksudo pm-suspend"))
     , ((shiftMask, xF86XK_Sleep), spawn ("gksudo pm-hibernate"))
-    ] ++ [
-    ((m .|. modm .|. controlMask, key), screenWorkspace sc >>= flip whenJust (windows . f)) | (key, sc) <- zip [xK_Left, xK_Right] [0, 1],
-    (f, m) <- [(W.view, 0), (W.shift, shiftMask)]
-    ] ++ [
-    ((m .|. modm, key), windows $ f i) | (i, key) <- zip (XMonad.workspaces conf) ([xK_Left, xK_Right]),
-    (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]
     ] ++ [
     ((m .|. modm .|. controlMask, key), screenWorkspace sc >>= flip whenJust (windows . f)) | (key, sc) <- zip [xK_comma, xK_period] [0, 1],
     (f, m) <- [(W.view, 0), (W.shift, shiftMask)]
