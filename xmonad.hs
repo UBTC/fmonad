@@ -189,8 +189,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm, xK_p), warpToWindow (0.5) (0.5))
     , ((modm .|. shiftMask, xK_p), refresh)
 
-    , ((modm, xK_a), runOrRaisePrompt myXPConfig)
-    , ((modm .|. shiftMask, xK_a), dwmpromote)
+    , ((modm, xK_x), runOrRaisePrompt myXPConfig)
+    , ((modm .|. shiftMask, xK_x), dwmpromote)
     , ((modm, xK_s), runOrRaiseNext myTerminal0 (className =? (myTerminal0) <||> className =? upperSHead (myTerminal0) <||> className =? myTerminal1 <||> className =? upperSHead myTerminal1 <||> className =? myTerminal2 <||> className =? upperSHead myTerminal2 <||> className =? myTerminal3 <||> className =? upperSHead myTerminal3 <||> className =? myTerminal4 <||> className =? upperSHead myTerminal4 <||> className =? (myTerminal5) <||> className =? upperSHead (myTerminal5)) ) -- >> (windows $ W.swapMaster) >> (windows $ W.greedyView "#0")
     , ((modm, xK_d), raiseNextMaybe (runInTerm myTermEdTitle myTermEditor) (title =? myEditor0 <||> title =? upperSHead myEditor0 <||> className =? myEditor0 <||> className =? upperSHead myEditor0 <||> className =? myEditor1 <||> className =? upperSHead myEditor1 <||> className =? myEditor2 <||> className =? upperSHead myEditor2 <||> className =? myEditor3 <||> className =? upperSHead myEditor3 <||> className =? myEditor4 <||> className =? upperSHead myEditor4 <||> className =? myEditor5 <||> className =? upperSHead myEditor5) )
     , ((modm, xK_f), runOrRaiseNext myFileManager0 (className =? myFileManager0 <||> className =? upperSHead myFileManager0 <||> className =? myFileManager1 <||> className =? upperSHead myFileManager1 <||> className =? myFileManager2 <||> className =? upperSHead myFileManager2 <||> className =? myFileManager3 <||> className =? upperSHead myFileManager3 <||> className =? myFileManager4 <||> className =? upperSHead myFileManager4 <||> className =? myFileManager5 <||> className =? upperSHead myFileManager5) )
@@ -211,8 +211,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     , ((modm, xK_z), spawn myCLILauncher)
     , ((modm .|. shiftMask, xK_z), spawn myGUILauncher)
-    , ((modm, xK_x), nextWS)
-    , ((modm .|. shiftMask, xK_x), shiftToNext >> nextWS)
+    , ((modm, xK_a), nextWS)
+    , ((modm .|. shiftMask, xK_a), shiftToNext >> nextWS)
     , ((modm, xK_c), myCommands >>= runCommand)
     , ((modm .|. shiftMask, xK_c), XMonad.kill)
     , ((modm, xK_v), spawn myVolumeDecrease)
