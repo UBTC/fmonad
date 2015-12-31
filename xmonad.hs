@@ -114,20 +114,20 @@ myFocusedBorderColor = colorGray
 myModMask = mod4Mask
 myFocusFollowsMouse = True
 myWorkspaces = ["#0", "#1"]
-myTerminal0 = "xfce4-terminal"
+myTerminal0 = "roxterm"
 myTerminal1 = "x-terminal-emulator"
-myTerminal2 = "roxterm"
+myTerminal2 = "xfce4-terminal"
 myTerminal3 = "lxterminal"
 myTerminal4 = "gnome-terminal"
 myTerminal5 = "konsole"
-myEditor0 = "emacs24"
+myEditor0 = "nvim"
 myEditor1 = "gvim"
-myEditor2 = "kate"
-myEditor3 = "gedit"
+myEditor2 = "emacs24"
+myEditor3 = "yi"
 myEditor4 = "geany"
 myEditor5 = "emacs"
-myFileManager0 = "thunar"
-myFileManager1 = "pcmanfm"
+myFileManager0 = "pcmanfm"
+myFileManager1 = "thunar"
 myFileManager2 = "dolphin"
 myFileManager3 = "nautilus"
 myFileManager4 = "spacefm"
@@ -138,12 +138,12 @@ myBrowser2 = "google-chrome"
 myBrowser3 = "chromium"
 myBrowser4 = "opera"
 myBrowser5 = "tor Browser"
-myGUILauncher = "xfce4-appfinder  --disable-server" -- gmrun
+myGUILauncher = "gmrun" -- xfce4-appfinder  --disable-server"
 myCLILauncher = "dmenu_run -i "
 mySh = "fish"
 myTermLauncher = mySh ++ " -c cat /dev/null | dmenu -i | xargs -i " ++ myTerminal0 ++ " -e {}"
 myLocker = "slock"
-myScreenshoter = "xfce4-screenshooter"
+myScreenshoter = "scrot -e 'mv $f ~/screenshots/'" -- xfce4-screenshooter
 myVolumeDecrease = "amixer -D pulse sset Master 10%-"
 myVolumeIncrease = "amixer -D pulse sset Master 5%+"
 myVolumeMute = "amixer -D pulse sset Master 0"
@@ -151,7 +151,9 @@ myVolumeUnmute = "amixer -D pulse sset Master 30%"
 myBrightDecrease = "xbacklight -10%"
 myBrightIncrease = "xbacklight +5%"
 myHeight = 18
-myFont = "xft:WenQuanYi Zen Hei Mono:Bold:antialias=true:pixelsize=12"
+myFont = "xft:WenQuanYi Zen Hei Mono:Bold:pixelsize=15:antialias=true:autohint=true"
+myTermEdTitle = "-c " ++ myEditor0 ++ " -T " ++ myEditor0 ++ " -f 'Liberation Mono:pixelsize=15:antialias=true:autohint=true' "
+myTermEditor = mySh ++ " -c " ++ myEditor0
 myXPConfig = defaultXPConfig
     { font = myFont
     , height = myHeight
@@ -191,22 +193,22 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm, xK_a), runOrRaisePrompt myXPConfig)
     , ((modm .|. shiftMask, xK_a), dwmpromote)
     , ((modm, xK_s), runOrRaiseNext myTerminal0 (className =? (myTerminal0) <||> className =? upperSHead (myTerminal0) <||> className =? myTerminal1 <||> className =? upperSHead myTerminal1 <||> className =? myTerminal2 <||> className =? upperSHead myTerminal2 <||> className =? myTerminal3 <||> className =? upperSHead myTerminal3 <||> className =? myTerminal4 <||> className =? upperSHead myTerminal4 <||> className =? (myTerminal5) <||> className =? upperSHead (myTerminal5)) ) -- >> (windows $ W.swapMaster) >> (windows $ W.greedyView "#0")
-    , ((modm, xK_d), raiseNextMaybe (runInTerm "-c Neovim -T Neovim -f 'Liberation Mono:pixelsize=15:antialias=true:autohint=true'" "fish -c 'nvim'") (title =? "neovim" <||> title =? "Neovim" <||> className =? myEditor0 <||> className =? upperSHead myEditor0 <||> className =? myEditor1 <||> className =? upperSHead myEditor1 <||> className =? myEditor2 <||> className =? upperSHead myEditor2 <||> className =? myEditor3 <||> className =? upperSHead myEditor3 <||> className =? myEditor4 <||> className =? upperSHead myEditor4 <||> className =? myEditor5 <||> className =? upperSHead myEditor5) )
+    , ((modm, xK_d), raiseNextMaybe (runInTerm myTermEdTitle myTermEditor) (title =? myEditor0 <||> title =? upperSHead myEditor0 <||> className =? myEditor0 <||> className =? upperSHead myEditor0 <||> className =? myEditor1 <||> className =? upperSHead myEditor1 <||> className =? myEditor2 <||> className =? upperSHead myEditor2 <||> className =? myEditor3 <||> className =? upperSHead myEditor3 <||> className =? myEditor4 <||> className =? upperSHead myEditor4 <||> className =? myEditor5 <||> className =? upperSHead myEditor5) )
     , ((modm, xK_f), runOrRaiseNext myFileManager0 (className =? myFileManager0 <||> className =? upperSHead myFileManager0 <||> className =? myFileManager1 <||> className =? upperSHead myFileManager1 <||> className =? myFileManager2 <||> className =? upperSHead myFileManager2 <||> className =? myFileManager3 <||> className =? upperSHead myFileManager3 <||> className =? myFileManager4 <||> className =? upperSHead myFileManager4 <||> className =? myFileManager5 <||> className =? upperSHead myFileManager5) )
     , ((modm, xK_g), runOrRaiseNext myBrowser0 (className =? myBrowser0 <||> className =? upperSHead myBrowser0 <||> className =? myBrowser1 <||> className =? upperSHead myBrowser1 <||> className =? myBrowser2 <||> className =? upperSHead myBrowser2 <||> className =? myBrowser3 <||> className =? upperSHead myBrowser3 <||> className =? myBrowser4 <||> className =? upperSHead myBrowser4 <||> className =? myBrowser5 <||> className =? upperSHead myBrowser5) )
     , ((modm .|. shiftMask, xK_s), (spawn myTerminal0) )
-    , ((modm .|. shiftMask, xK_d), runInTerm "-c Neovim -T Neovim -f 'Liberation Mono:pixelsize=15:antialias=true:autohint=true'" "fish -c 'nvim'")
+    , ((modm .|. shiftMask, xK_d), runInTerm myTermEdTitle myTermEditor)
     , ((modm .|. shiftMask, xK_f), (spawn myFileManager0) )
     , ((modm .|. shiftMask, xK_g), (spawn myBrowser0) )
 
     , ((0, xF86XK_DOS), runOrRaiseNext myTerminal0 (className =? (myTerminal0) <||> className =? upperSHead (myTerminal0) <||> className =? myTerminal1 <||> className =? upperSHead myTerminal1 <||> className =? myTerminal2 <||> className =? upperSHead myTerminal2 <||> className =? myTerminal3 <||> className =? upperSHead myTerminal3 <||> className =? myTerminal4 <||> className =? upperSHead myTerminal4 <||> className =? (myTerminal5) <||> className =? upperSHead (myTerminal5)) )
-    , ((0, xF86XK_Documents), raiseNextMaybe (runInTerm "-c Neovim -T Neovim -f 'Liberation Mono:pixelsize=15:antialias=true:autohint=true'" "fish -c 'nvim'") (title =? "neovim" <||> title =? "Neovim" <||> className =? myEditor0 <||> className =? upperSHead myEditor0 <||> className =? myEditor1 <||> className =? upperSHead myEditor1 <||> className =? myEditor2 <||> className =? upperSHead myEditor2 <||> className =? myEditor3 <||> className =? upperSHead myEditor3 <||> className =? myEditor4 <||> className =? upperSHead myEditor4 <||> className =? myEditor5 <||> className =? upperSHead myEditor5) )
+    , ((modm, xK_d), raiseNextMaybe (runInTerm myTermEdTitle myTermEditor) (title =? myEditor0 <||> title =? upperSHead myEditor0 <||> className =? myEditor0 <||> className =? upperSHead myEditor0 <||> className =? myEditor1 <||> className =? upperSHead myEditor1 <||> className =? myEditor2 <||> className =? upperSHead myEditor2 <||> className =? myEditor3 <||> className =? upperSHead myEditor3 <||> className =? myEditor4 <||> className =? upperSHead myEditor4 <||> className =? myEditor5 <||> className =? upperSHead myEditor5) )
     , ((0, xF86XK_MyComputer), runOrRaiseNext myFileManager0 (className =? myFileManager0 <||> className =? upperSHead myFileManager0 <||> className =? myFileManager1 <||> className =? upperSHead myFileManager1 <||> className =? myFileManager2 <||> className =? upperSHead myFileManager2 <||> className =? myFileManager3 <||> className =? upperSHead myFileManager3 <||> className =? myFileManager4 <||> className =? upperSHead myFileManager4 <||> className =? myFileManager5 <||> className =? upperSHead myFileManager5) )
     , ((0, xF86XK_WWW), runOrRaiseNext myBrowser0 (className =? myBrowser0 <||> className =? upperSHead myBrowser0 <||> className =? myBrowser1 <||> className =? upperSHead myBrowser1 <||> className =? myBrowser2 <||> className =? upperSHead myBrowser2 <||> className =? myBrowser3 <||> className =? upperSHead myBrowser3 <||> className =? myBrowser4 <||> className =? upperSHead myBrowser4 <||> className =? myBrowser5 <||> className =? upperSHead myBrowser5) )
-    , ((shiftMask, xF86XK_DOS), spawn myTerminal0 )
-    , ((shiftMask, xF86XK_Documents), runInTerm "-c Neovim -T Neovim -f 'Liberation Mono:pixelsize=15:antialias=true:autohint=true'" "fish -c 'nvim'")
-    , ((shiftMask, xF86XK_MyComputer), spawn myFileManager0 )
-    , ((shiftMask, xF86XK_WWW), spawn myBrowser0 )
+    , ((shiftMask, xF86XK_DOS), spawn myTerminal0)
+    , ((shiftMask, xF86XK_Documents), runInTerm myTermEdTitle myTermEditor)
+    , ((shiftMask, xF86XK_MyComputer), spawn myFileManager0)
+    , ((shiftMask, xF86XK_WWW), spawn myBrowser0)
 
     , ((modm, xK_z), spawn myCLILauncher)
     , ((modm .|. shiftMask, xK_z), spawn myGUILauncher)
@@ -396,20 +398,21 @@ myStartupHook = do
     ewmhDesktopsStartup
     startupHook desktopConfig
     spawnOnce "setxkbmap -option caps:swapescape" -- swap caps and esc
-    {-spawnOnce "xrandr --output eDP1 --right-of DP2 --auto" -- two screens-}
+--  spawnOnce "xmodmap -e 'pointer = 1 2 3 5 4 7 6 8 9 10 11 12'" -- mouse...
+--  spawnOnce "xrandr --output eDP1 --right-of DP2 --auto" -- two screens
     spawnOnce "nm-applet" -- network monitor
     spawnOnce "fcitx-autostart" -- input Chinese
     spawnOnce "xbacklight = 20" -- screen brightness
     spawnOnce "xfce4-power-manager" -- power manager
     spawnOnce "xsetroot -solid black -cursor_name left_ptr" -- desktop background & mouse pointer
     spawnOnce "pactl set-sink-volume 0 '10%'" -- volume
---  spawnOnce "xfce4-panel" -- the panel
-    spawnOnce "tint2" -- the panel
+    spawnOnce "lxpanel" -- the panel
     spawnOnce "skype" -- keep in touch
---  spawnOnce "keynav" -- keyboard-driven mouse cursor mover
+    spawnOnce "keynav" -- keyboard-driven mouse cursor mover
     spawnOnce "megasync" -- cloud storage
     spawnOnce "xautolock -time 5 -locker slock -nowlocker slock" -- autolocker
     spawnOnce "play /home/mw/MEGAsync/Music/login-sound/ubuntu11/desktop-login.ogg" -- login sound
+    spawnOnce "mkdir -p ~/screenshots/"
 --  spawn eamcs as daemon???
 
 ------------------------------------------------------------------------
@@ -432,5 +435,6 @@ main = do
         , logHook = myLogHook >> historyHook
         , startupHook = myStartupHook
         }
+
 --
 -- 404 NOT FOUND
