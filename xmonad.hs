@@ -235,8 +235,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm, xK_space), sendMessage NextLayout)
     , ((modm, xK_o), changeDir myXPConfig)
     , ((modm .|. shiftMask, xK_o), AL.launchApp myXPConfig { defaultText = "~" } myFileManager0)
-    , ((modm, xK_grave), windows W.focusMaster)
-    , ((modm .|. shiftMask, xK_grave), windows W.swapMaster)
 
     , ((modm, xK_Right), gotoMenu >> windows W.swapMaster)
     , ((modm, xK_Left), nextMatch History (return True))
@@ -280,7 +278,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. controlMask, xK_0), rescreen)
     , ((modm .|. mod1Mask, xK_0), rescreen)
 
-    , ((modm, xK_0), spawn myLocker)
+    , ((modm .|. shiftMask, xK_grave), spawn myLocker)
     , ((0, xK_Print), spawn myScreenshoter)
     , ((modm .|. controlMask .|. shiftMask, xK_Escape), confirmPrompt myXPConfig "LOGOUT" $ io (exitWith ExitSuccess)) -- xK_Caps_Lock
     , ((0, xF86XK_Sleep), spawn ("gksudo pm-suspend"))
@@ -292,9 +290,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     ((m .|. modm, key), windows $ f i) | (i, key) <- zip (XMonad.workspaces conf) ([xK_comma, xK_period]),
     (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]
     ] ++ [
-    ((modm, k), focusNth i) | (i, k) <- zip [1 .. 9] [xK_1 .. xK_9]
+    ((modm, k), focusNth i) | (i, k) <- zip [0 .. 9] ([xK_1 .. xK_9]++[xK_0])
     ] ++ [
---  ((modm .|. shiftMaster, k), swapNth i) | (i, k) <- zip [1 .. 9] [xK_1 .. xK_9]
+--  ((modm .|. shiftMask, k), swapNth i) | (i, k) <- zip [0 .. 9] ([xK_1 .. xK_9]++[xK_0])
     ] ++ [
     ((modm .|. mod1Mask, k), layoutScreens 2 (Mirror (TwoPane (i/10) (1-i/10)))) | (i, k) <- zip [1 .. 9] [xK_1 .. xK_9]
     ] ++ [
@@ -430,6 +428,3 @@ main = do
         , logHook = myLogHook >> historyHook
         , startupHook = myStartupHook
         }
-
---
--- 404 NOT FOUND
