@@ -24,6 +24,7 @@
 -- 2013 Fenghua, Ningbo, Zhejiang
 -- 2014 Dev. Zone, Dalian, Liaoning
 -- 2015 Shanghai Jiao Tong University
+-- 2016 Shanghai Jiao Tong University
 --
 --------------------------------------------------------------------------------
 
@@ -114,6 +115,7 @@ myFocusedBorderColor = colorGray
 myModMask = mod4Mask
 myFocusFollowsMouse = True
 myWorkspaces = ["#0", "#1"]
+
 myTerminal0 = "roxterm"
 myTerminal1 = "x-terminal-emulator"
 myTerminal2 = "xfce4-terminal"
@@ -139,6 +141,7 @@ myBrowser2 = "google-chrome"
 myBrowser3 = "chromium"
 myBrowser4 = "opera"
 myBrowser5 = "tor Browser"
+
 myGUILauncher = "gmrun" -- xfce4-appfinder  --disable-server"
 myCLILauncher = "dmenu_run -i "
 mySh = "fish"
@@ -155,6 +158,7 @@ myHeight = 18
 myFont = "xft:WenQuanYi Zen Hei Mono:Bold:pixelsize=12:antialias=true:autohint=true"
 neoEditorCap = "-c " ++ neoEditor ++ " -T " ++ neoEditor ++ " -f 'Liberation Mono:pixelsize=16:antialias=true:autohint=true' "
 neoEditorCmd = mySh ++ " -c " ++ neoEditor
+
 myXPConfig = defaultXPConfig
     { font = myFont
     , height = myHeight
@@ -167,6 +171,38 @@ myXPConfig = defaultXPConfig
     , historySize = 100
     , historyFilter = deleteConsecutive
     }
+
+myWidth = 360
+myNavigation :: TwoD a (Maybe a)
+myNavigation = makeXEventhandler $ shadowWithKeymap navKeyMap navDefaultHandler
+             where navKeyMap = M.fromList
+                             [ ((0, xK_Escape), cancel)
+                             , ((0, xK_Return), select)
+                             , ((0, xK_semicolon), substringSearch myNavigation)
+                             , ((0, xK_Left)  , move   (-1,  0) >> myNavigation)
+                             , ((0, xK_h)     , move   (-1,  0) >> myNavigation)
+                             , ((0, xK_Right) , move   ( 1,  0) >> myNavigation)
+                             , ((0, xK_l)     , move   ( 1,  0) >> myNavigation)
+                             , ((0, xK_Down)  , move   ( 0,  1) >> myNavigation)
+                             , ((0, xK_j)     , move   ( 0,  1) >> myNavigation)
+                             , ((0, xK_Up)    , move   ( 0, -1) >> myNavigation)
+                             , ((0, xK_k)     , move   ( 0, -1) >> myNavigation)
+                             , ((0, xK_u)     , move   (-1, -1) >> myNavigation)
+                             , ((0, xK_i)     , move   ( 1, -1) >> myNavigation)
+                             , ((0, xK_n)     , move   (-1,  1) >> myNavigation)
+                             , ((0, xK_m)     , move   ( 1, -1) >> myNavigation)
+                             , ((0, xK_g)     , setPos ( 0,  0) >> myNavigation)
+                             , ((0, xK_Tab),    moveNext >> myNavigation)
+                             , ((0, xK_grave),  movePrev >> myNavigation)
+                             ]
+                   -- The navigation handler ignores unknown key symbols:
+                   navDefaultHandler = const myNavigation
+myGSConfig = defaultGSConfig
+    { gs_font = myFont
+    , gs_cellwidth = myWidth
+    , gs_navigate = myNavigation
+    }
+
 myCommands = defaultCommands
 data EnterPrompt = EnterPrompt String
 instance XPrompt EnterPrompt where showXPrompt (EnterPrompt n) = "Confirm : " ++ n ++ " ? Esc/Enter> "
@@ -190,7 +226,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm, xK_p), warpToWindow (0.5) (0.5))
     , ((modm .|. shiftMask, xK_p), refresh)
 
-    , ((modm, xK_x), runOrRaisePrompt myXPConfig)
+    , ((modm, xK_x), nextMatch History (return True))
     , ((modm .|. shiftMask, xK_x), dwmpromote)
     , ((modm, xK_s), runOrRaiseNext myTerminal0 (className =? (myTerminal0) <||> className =? upperSHead (myTerminal0) <||> className =? myTerminal1 <||> className =? upperSHead myTerminal1 <||> className =? myTerminal2 <||> className =? upperSHead myTerminal2 <||> className =? myTerminal3 <||> className =? upperSHead myTerminal3 <||> className =? myTerminal4 <||> className =? upperSHead myTerminal4 <||> className =? (myTerminal5) <||> className =? upperSHead (myTerminal5)) ) -- >> (windows $ W.swapMaster) >> (windows $ W.greedyView "#0")
     , ((modm, xK_d), raiseNextMaybe (runInTerm neoEditorCap neoEditorCmd) (title =? neoEditor <||> title =? upperSHead neoEditor <||> className =? myEditor0 <||> className =? upperSHead myEditor0 <||> className =? myEditor1 <||> className =? upperSHead myEditor1 <||> className =? myEditor2 <||> className =? upperSHead myEditor2 <||> className =? myEditor3 <||> className =? upperSHead myEditor3 <||> className =? myEditor4 <||> className =? upperSHead myEditor4 <||> className =? myEditor5 <||> className =? upperSHead myEditor5) )
@@ -235,9 +271,12 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm, xK_space), sendMessage NextLayout)
     , ((modm, xK_o), changeDir myXPConfig)
     , ((modm .|. shiftMask, xK_o), AL.launchApp myXPConfig { defaultText = "~" } myFileManager0)
+    , ((modm, xK_BackSpace), spawn myLocker)
 
     , ((modm, xK_Right), gotoMenu >> windows W.swapMaster)
     , ((modm, xK_Left), nextMatch History (return True))
+    , ((modm, xK_Up), goToSelected myGSConfig)
+    , ((modm, xK_Down), dwmpromote)
     , ((modm .|. shiftMask, xK_Left),    withFocused (keysMoveWindow (-150,   0)))
     , ((modm .|. shiftMask, xK_Right),   withFocused (keysMoveWindow ( 150,   0)))
     , ((modm .|. shiftMask, xK_Up),      withFocused (keysMoveWindow (   0,-100)))
@@ -278,7 +317,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. controlMask, xK_0), rescreen)
     , ((modm .|. mod1Mask, xK_0), rescreen)
 
-    , ((modm .|. shiftMask, xK_grave), spawn myLocker)
+    , ((modm, xK_grave), goToSelected myGSConfig)
+    , ((modm .|. shiftMask, xK_grave), runOrRaisePrompt myXPConfig)
     , ((0, xK_Print), spawn myScreenshoter)
     , ((modm .|. controlMask .|. shiftMask, xK_Escape), confirmPrompt myXPConfig "LOGOUT" $ io (exitWith ExitSuccess)) -- xK_Caps_Lock
     , ((0, xF86XK_Sleep), spawn ("gksudo pm-suspend"))
