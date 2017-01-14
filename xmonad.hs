@@ -15,7 +15,7 @@
 -- Yet Another Xmonad Configuration
 --
 -- Mogei Wang
--- COPYRIGHT 2009-2016
+-- COPYRIGHT 2009-2017
 --
 -- 2009 Dalian University of Technology
 -- 2010 Dalian University of Technology
@@ -116,23 +116,22 @@ myModMask = mod4Mask
 myFocusFollowsMouse = True
 myWorkspaces = ["#0", "#1"]
 
-myTerminal0 = "roxterm"
+myTerminal0 = "gnome-terminal"
 myTerminal1 = "x-terminal-emulator"
 myTerminal2 = "xfce4-terminal"
 myTerminal3 = "lxterminal"
-myTerminal4 = "gnome-terminal"
+myTerminal4 = "roxterm"
 myTerminal5 = "konsole"
-neoEditor = "nvim"
-myEditor0 = "emacs24"
+myEditor0 = "emacs"
 myEditor1 = "gvim"
 myEditor2 = "kate"
 myEditor3 = "yi"
 myEditor4 = "geany"
 myEditor5 = "emacs"
-myFileManager0 = "pcmanfm"
+myFileManager0 = "nautilus"
 myFileManager1 = "thunar"
 myFileManager2 = "dolphin"
-myFileManager3 = "nautilus"
+myFileManager3 = "pcmanfm"
 myFileManager4 = "spacefm"
 myFileManager5 = "file"
 myBrowser0 = "firefox"
@@ -156,8 +155,6 @@ myBrightDecrease = "xbacklight -10%"
 myBrightIncrease = "xbacklight +5%"
 myHeight = 18
 myFont = "xft:WenQuanYi Zen Hei Mono:Bold:pixelsize=12:antialias=true:autohint=true"
-neoEditorCap = "-c " ++ neoEditor ++ " -T " ++ neoEditor ++ " -f 'Liberation Mono:pixelsize=16:antialias=true:autohint=true' "
-neoEditorCmd = mySh ++ " -c " ++ neoEditor
 
 myXPConfig = defaultXPConfig
     { font = myFont
@@ -220,7 +217,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm .|. shiftMask, xK_Tab), windows W.focusUp)
     , ((modm, xK_q), windows W.swapUp)
     , ((modm .|. shiftMask, xK_q), windows W.swapDown)
-
     , ((modm, xK_semicolon), windows copyToAll)
     , ((modm .|. shiftMask, xK_semicolon), killAllOtherCopies)
     , ((modm, xK_w), sinkAll)
@@ -233,20 +229,20 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm, xK_x), nextMatch History (return True))
     , ((modm .|. shiftMask, xK_x), dwmpromote)
     , ((modm, xK_s), runOrRaiseNext myTerminal0 (className =? (myTerminal0) <||> className =? upperSHead (myTerminal0) <||> className =? myTerminal1 <||> className =? upperSHead myTerminal1 <||> className =? myTerminal2 <||> className =? upperSHead myTerminal2 <||> className =? myTerminal3 <||> className =? upperSHead myTerminal3 <||> className =? myTerminal4 <||> className =? upperSHead myTerminal4 <||> className =? (myTerminal5) <||> className =? upperSHead (myTerminal5)) ) -- >> (windows $ W.swapMaster) >> (windows $ W.greedyView "#0")
-    , ((modm, xK_d), raiseNextMaybe (runInTerm neoEditorCap neoEditorCmd) (title =? neoEditor <||> title =? upperSHead neoEditor <||> className =? myEditor0 <||> className =? upperSHead myEditor0 <||> className =? myEditor1 <||> className =? upperSHead myEditor1 <||> className =? myEditor2 <||> className =? upperSHead myEditor2 <||> className =? myEditor3 <||> className =? upperSHead myEditor3 <||> className =? myEditor4 <||> className =? upperSHead myEditor4 <||> className =? myEditor5 <||> className =? upperSHead myEditor5) )
+    , ((modm, xK_d), runOrRaiseNext myEditor0 (className =? myEditor0 <||> className =? upperSHead myEditor0 <||> className =? myEditor1 <||> className =? upperSHead myEditor1 <||> className =? myEditor2 <||> className =? upperSHead myEditor2 <||> className =? myEditor3 <||> className =? upperSHead myEditor3 <||> className =? myEditor4 <||> className =? upperSHead myEditor4 <||> className =? myEditor5 <||> className =? upperSHead myEditor5) )
     , ((modm, xK_f), runOrRaiseNext myFileManager0 (className =? myFileManager0 <||> className =? upperSHead myFileManager0 <||> className =? myFileManager1 <||> className =? upperSHead myFileManager1 <||> className =? myFileManager2 <||> className =? upperSHead myFileManager2 <||> className =? myFileManager3 <||> className =? upperSHead myFileManager3 <||> className =? myFileManager4 <||> className =? upperSHead myFileManager4 <||> className =? myFileManager5 <||> className =? upperSHead myFileManager5) )
     , ((modm, xK_g), runOrRaiseNext myBrowser0 (className =? myBrowser0 <||> className =? upperSHead myBrowser0 <||> className =? myBrowser1 <||> className =? upperSHead myBrowser1 <||> className =? myBrowser2 <||> className =? upperSHead myBrowser2 <||> className =? myBrowser3 <||> className =? upperSHead myBrowser3 <||> className =? myBrowser4 <||> className =? upperSHead myBrowser4 <||> className =? myBrowser5 <||> className =? upperSHead myBrowser5) )
     , ((modm .|. shiftMask, xK_s), (spawn myTerminal0) )
-    , ((modm .|. shiftMask, xK_d), runInTerm neoEditorCap neoEditorCmd)
+    , ((modm .|. shiftMask, xK_d), (spawn myEditor0) )
     , ((modm .|. shiftMask, xK_f), (spawn myFileManager0) )
     , ((modm .|. shiftMask, xK_g), (spawn myBrowser0) )
 
     , ((0, xF86XK_DOS), runOrRaiseNext myTerminal0 (className =? (myTerminal0) <||> className =? upperSHead (myTerminal0) <||> className =? myTerminal1 <||> className =? upperSHead myTerminal1 <||> className =? myTerminal2 <||> className =? upperSHead myTerminal2 <||> className =? myTerminal3 <||> className =? upperSHead myTerminal3 <||> className =? myTerminal4 <||> className =? upperSHead myTerminal4 <||> className =? (myTerminal5) <||> className =? upperSHead (myTerminal5)) )
-    , ((modm, xF86XK_Documents), raiseNextMaybe (runInTerm neoEditorCap neoEditorCmd) (title =? neoEditor <||> title =? upperSHead neoEditor <||> className =? myEditor0 <||> className =? upperSHead myEditor0 <||> className =? myEditor1 <||> className =? upperSHead myEditor1 <||> className =? myEditor2 <||> className =? upperSHead myEditor2 <||> className =? myEditor3 <||> className =? upperSHead myEditor3 <||> className =? myEditor4 <||> className =? upperSHead myEditor4 <||> className =? myEditor5 <||> className =? upperSHead myEditor5) )
+    , ((modm, xF86XK_Documents), runOrRaiseNext myEditor0 (className =? myEditor0 <||> className =? upperSHead myEditor0 <||> className =? myEditor1 <||> className =? upperSHead myEditor1 <||> className =? myEditor2 <||> className =? upperSHead myEditor2 <||> className =? myEditor3 <||> className =? upperSHead myEditor3 <||> className =? myEditor4 <||> className =? upperSHead myEditor4 <||> className =? myEditor5 <||> className =? upperSHead myEditor5) )
     , ((0, xF86XK_MyComputer), runOrRaiseNext myFileManager0 (className =? myFileManager0 <||> className =? upperSHead myFileManager0 <||> className =? myFileManager1 <||> className =? upperSHead myFileManager1 <||> className =? myFileManager2 <||> className =? upperSHead myFileManager2 <||> className =? myFileManager3 <||> className =? upperSHead myFileManager3 <||> className =? myFileManager4 <||> className =? upperSHead myFileManager4 <||> className =? myFileManager5 <||> className =? upperSHead myFileManager5) )
     , ((0, xF86XK_WWW), runOrRaiseNext myBrowser0 (className =? myBrowser0 <||> className =? upperSHead myBrowser0 <||> className =? myBrowser1 <||> className =? upperSHead myBrowser1 <||> className =? myBrowser2 <||> className =? upperSHead myBrowser2 <||> className =? myBrowser3 <||> className =? upperSHead myBrowser3 <||> className =? myBrowser4 <||> className =? upperSHead myBrowser4 <||> className =? myBrowser5 <||> className =? upperSHead myBrowser5) )
     , ((shiftMask, xF86XK_DOS), spawn myTerminal0)
-    , ((shiftMask, xF86XK_Documents), runInTerm neoEditorCap neoEditorCmd)
+    , ((shiftMask, xF86XK_Documents), spawn myEditor0)
     , ((shiftMask, xF86XK_MyComputer), spawn myFileManager0)
     , ((shiftMask, xF86XK_WWW), spawn myBrowser0)
 
@@ -424,7 +420,7 @@ myEventHook = do
 -------------------------------------------------------------------------
 --
 myLogHook = do
-    updatePointer (Relative 0.5 0.5)
+    updatePointer (0.5, 0.5) (1, 1)
     takeTopFocus >> setWMName "LG3D"
     logHook desktopConfig
     ewmhDesktopsLogHook
@@ -443,12 +439,12 @@ myStartupHook = do
     spawnOnce "xfce4-power-manager" -- power manager
     spawnOnce "xsetroot -solid black -cursor_name left_ptr" -- desktop background & mouse pointer
     spawnOnce "pactl set-sink-volume 0 '10%'" -- volume
-    spawnOnce "lxpanel" -- the panel
+    spawnOnce "xfce4-panel" -- the panel
     spawnOnce "skype" -- keep in touch
-    spawnOnce "keynav" -- keyboard-driven mouse cursor mover
-    spawnOnce "megasync" -- cloud storage
+    -- spawnOnce "keynav" -- keyboard-driven mouse cursor mover
+    -- spawnOnce "megasync" -- cloud storage
     spawnOnce "xautolock -time 5 -locker slock -nowlocker slock" -- autolocker
-    spawnOnce "play /home/mw/MEGAsync/Music/login-sound/ubuntu11/desktop-login.ogg" -- login sound
+    spawnOnce "mpv /home/mw/MEGAsync/Music/login-sound/ubuntu11/desktop-login.ogg" -- login sound
     spawnOnce "mkdir -p ~/screenshots/"
 --  spawn eamcs as daemon???
 
