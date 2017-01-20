@@ -169,41 +169,6 @@ myXPConfig = defaultXPConfig
     , historyFilter = deleteConsecutive
     }
 
-myWidth = 360
-myNavigation :: TwoD a (Maybe a)
-myNavigation = makeXEventhandler $ shadowWithKeymap navKeyMap navDefaultHandler
-             where navKeyMap = M.fromList
-                             [ ((0, xK_Escape), cancel)
-                             , ((0, xK_Return), select)
-                             , ((0, xK_d), cancel)
-                             , ((0, xK_f), cancel)
-                             , ((0, xK_a), select)
-                             , ((0, xK_s), select)
-                             , ((0, xK_semicolon), substringSearch myNavigation)
-                             , ((0, xK_h)     , move   (-1,  0) >> myNavigation)
-                             , ((0, xK_l)     , move   ( 1,  0) >> myNavigation)
-                             , ((0, xK_j)     , move   ( 0,  1) >> myNavigation)
-                             , ((0, xK_k)     , move   ( 0, -1) >> myNavigation)
-                             , ((0, xK_u)     , move   (-1, -1) >> myNavigation)
-                             , ((0, xK_i)     , move   ( 1, -1) >> myNavigation)
-                             , ((0, xK_n)     , move   (-1,  1) >> myNavigation)
-                             , ((0, xK_m)     , move   ( 1, -1) >> myNavigation)
-                             , ((0, xK_g)     , setPos ( 0,  0) >> myNavigation)
-                             , ((0, xK_Left)  , movePrev >> myNavigation)
-                             , ((0, xK_Right) , moveNext >> myNavigation)
-                             , ((0, xK_Down)  , movePrev >> myNavigation)
-                             , ((0, xK_Up)    , moveNext >> myNavigation)
-                             , ((0, xK_grave),  movePrev >> myNavigation)
-                             , ((0, xK_Tab),    moveNext >> myNavigation)
-                             ]
-                   -- The navigation handler ignores unknown key symbols:
-                   navDefaultHandler = const myNavigation
-myGSConfig = defaultGSConfig
-    { gs_font = myFont
-    , gs_cellwidth = myWidth
-    , gs_navigate = myNavigation
-    }
-
 myCommands = defaultCommands
 data EnterPrompt = EnterPrompt String
 instance XPrompt EnterPrompt where showXPrompt (EnterPrompt n) = "Confirm : " ++ n ++ " ? Esc/Enter> "
@@ -215,27 +180,17 @@ confirmPrompt config app func = mkXPrompt (EnterPrompt app) config (mkComplFunFr
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [ ((modm, xK_Tab), windows W.focusDown)
     , ((modm .|. shiftMask, xK_Tab), windows W.focusUp)
-    , ((modm, xK_q), windows W.swapUp)
-    , ((modm .|. shiftMask, xK_q), windows W.swapDown)
-    , ((modm, xK_semicolon), windows copyToAll)
-    , ((modm .|. shiftMask, xK_semicolon), killAllOtherCopies)
-    , ((modm, xK_w), sinkAll)
-    , ((modm .|. shiftMask, xK_w), withFocused $ windows . W.sink)
-    , ((modm, xK_i), sendMessage RestoreNextMinimizedWin)
-    , ((modm .|. shiftMask, xK_i), withFocused minimizeWindow)
-    , ((modm, xK_p), warpToWindow (0.5) (0.5))
-    , ((modm .|. shiftMask, xK_p), refresh)
+    , ((modm, xK_grave), windows W.swapUp)
+    , ((modm .|. shiftMask, xK_grave), windows W.swapDown)
 
-    , ((modm, xK_x), nextMatch History (return True))
-    , ((modm .|. shiftMask, xK_x), dwmpromote)
+    , ((modm, xK_a), runOrRaiseNext myBrowser0 (className =? myBrowser0 <||> className =? upperSHead myBrowser0 <||> className =? myBrowser1 <||> className =? upperSHead myBrowser1 <||> className =? myBrowser2 <||> className =? upperSHead myBrowser2 <||> className =? myBrowser3 <||> className =? upperSHead myBrowser3 <||> className =? myBrowser4 <||> className =? upperSHead myBrowser4 <||> className =? myBrowser5 <||> className =? upperSHead myBrowser5) )
     , ((modm, xK_s), runOrRaiseNext myTerminal0 (className =? (myTerminal0) <||> className =? upperSHead (myTerminal0) <||> className =? myTerminal1 <||> className =? upperSHead myTerminal1 <||> className =? myTerminal2 <||> className =? upperSHead myTerminal2 <||> className =? myTerminal3 <||> className =? upperSHead myTerminal3 <||> className =? myTerminal4 <||> className =? upperSHead myTerminal4 <||> className =? (myTerminal5) <||> className =? upperSHead (myTerminal5)) ) -- >> (windows $ W.swapMaster) >> (windows $ W.greedyView "#0")
     , ((modm, xK_d), runOrRaiseNext myEditor0 (className =? myEditor0 <||> className =? upperSHead myEditor0 <||> className =? myEditor1 <||> className =? upperSHead myEditor1 <||> className =? myEditor2 <||> className =? upperSHead myEditor2 <||> className =? myEditor3 <||> className =? upperSHead myEditor3 <||> className =? myEditor4 <||> className =? upperSHead myEditor4 <||> className =? myEditor5 <||> className =? upperSHead myEditor5) )
     , ((modm, xK_f), runOrRaiseNext myFileManager0 (className =? myFileManager0 <||> className =? upperSHead myFileManager0 <||> className =? myFileManager1 <||> className =? upperSHead myFileManager1 <||> className =? myFileManager2 <||> className =? upperSHead myFileManager2 <||> className =? myFileManager3 <||> className =? upperSHead myFileManager3 <||> className =? myFileManager4 <||> className =? upperSHead myFileManager4 <||> className =? myFileManager5 <||> className =? upperSHead myFileManager5) )
-    , ((modm, xK_g), runOrRaiseNext myBrowser0 (className =? myBrowser0 <||> className =? upperSHead myBrowser0 <||> className =? myBrowser1 <||> className =? upperSHead myBrowser1 <||> className =? myBrowser2 <||> className =? upperSHead myBrowser2 <||> className =? myBrowser3 <||> className =? upperSHead myBrowser3 <||> className =? myBrowser4 <||> className =? upperSHead myBrowser4 <||> className =? myBrowser5 <||> className =? upperSHead myBrowser5) )
+    , ((modm .|. shiftMask, xK_a), (spawn myBrowser0) )
     , ((modm .|. shiftMask, xK_s), (spawn myTerminal0) )
     , ((modm .|. shiftMask, xK_d), (spawn myEditor0) )
     , ((modm .|. shiftMask, xK_f), (spawn myFileManager0) )
-    , ((modm .|. shiftMask, xK_g), (spawn myBrowser0) )
 
     , ((0, xF86XK_DOS), runOrRaiseNext myTerminal0 (className =? (myTerminal0) <||> className =? upperSHead (myTerminal0) <||> className =? myTerminal1 <||> className =? upperSHead myTerminal1 <||> className =? myTerminal2 <||> className =? upperSHead myTerminal2 <||> className =? myTerminal3 <||> className =? upperSHead myTerminal3 <||> className =? myTerminal4 <||> className =? upperSHead myTerminal4 <||> className =? (myTerminal5) <||> className =? upperSHead (myTerminal5)) )
     , ((modm, xF86XK_Documents), runOrRaiseNext myEditor0 (className =? myEditor0 <||> className =? upperSHead myEditor0 <||> className =? myEditor1 <||> className =? upperSHead myEditor1 <||> className =? myEditor2 <||> className =? upperSHead myEditor2 <||> className =? myEditor3 <||> className =? upperSHead myEditor3 <||> className =? myEditor4 <||> className =? upperSHead myEditor4 <||> className =? myEditor5 <||> className =? upperSHead myEditor5) )
@@ -246,10 +201,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((shiftMask, xF86XK_MyComputer), spawn myFileManager0)
     , ((shiftMask, xF86XK_WWW), spawn myBrowser0)
 
-    , ((modm, xK_z), spawn myCLILauncher)
-    , ((modm .|. shiftMask, xK_z), spawn myGUILauncher)
-    , ((modm, xK_a), nextWS)
-    , ((modm .|. shiftMask, xK_a), shiftToNext >> nextWS)
+    , ((modm, xK_x), spawn myCLILauncher)
+    , ((modm .|. shiftMask, xK_x), spawn myGUILauncher)
     , ((modm, xK_c), myCommands >>= runCommand)
     , ((modm .|. shiftMask, xK_c), XMonad.kill)
     , ((modm, xK_v), spawn myVolumeDecrease)
@@ -268,67 +221,25 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((0, xF86XK_MonBrightnessDown), spawn myBrightDecrease)
     , ((0, xF86XK_MonBrightnessUp), spawn myBrightIncrease)
 
-    , ((modm, xK_space), sendMessage NextLayout)
-    , ((modm, xK_o), changeDir myXPConfig)
-    , ((modm .|. shiftMask, xK_o), AL.launchApp myXPConfig { defaultText = "~" } myFileManager0)
-    , ((modm, xK_BackSpace), spawn myLocker)
-
-    , ((modm, xK_Right), gotoMenu >> windows W.swapMaster)
-    , ((modm, xK_Left), nextMatch History (return True))
-    , ((modm, xK_Up), goToSelected myGSConfig)
-    , ((modm, xK_Down), dwmpromote)
-    , ((modm .|. shiftMask, xK_Left),    withFocused (keysMoveWindow (-150,   0)))
-    , ((modm .|. shiftMask, xK_Right),   withFocused (keysMoveWindow ( 150,   0)))
-    , ((modm .|. shiftMask, xK_Up),      withFocused (keysMoveWindow (   0,-100)))
-    , ((modm .|. shiftMask, xK_Down),    withFocused (keysMoveWindow (   0, 100)))
-    , ((modm .|. mod1Mask,  xK_Left),    withFocused (keysResizeWindow (-150,   0) (0,0)))
-    , ((modm .|. mod1Mask,  xK_Right),   withFocused (keysResizeWindow ( 150,   0) (0,0)))
-    , ((modm .|. mod1Mask,  xK_Up),      withFocused (keysResizeWindow (   0,-100) (0,0)))
-    , ((modm .|. mod1Mask,  xK_Down),    withFocused (keysResizeWindow (   0, 100) (0,0)))
-    , ((modm .|. controlMask, xK_Left),  withFocused (keysResizeWindow ( 150,   0) (1,1)))
-    , ((modm .|. controlMask, xK_Right), withFocused (keysResizeWindow (-150,   0) (1,1)))
-    , ((modm .|. controlMask, xK_Up),    withFocused (keysResizeWindow (   0, 100) (1,1)))
-    , ((modm .|. controlMask, xK_Down),  withFocused (keysResizeWindow (   0,-100) (1,1)))
-
     , ((modm, xK_e), sendMessage (IncMasterN 1))
     , ((modm .|. shiftMask, xK_e), sendMessage (IncMasterN(-1)))
-    , ((modm, xK_r), sendMessage Expand)
-    , ((modm .|. shiftMask, xK_r), sendMessage Shrink)
-    , ((modm, xK_t), sendMessage ExpandSlave)
-    , ((modm .|. shiftMask, xK_t), sendMessage ShrinkSlave)
-    , ((modm, xK_u), sendMessage $ Toggle REFLECTX)
-    , ((modm .|. shiftMask, xK_u), sendMessage $ Toggle REFLECTY)
-    , ((modm, xK_y), sendMessage $ Toggle MIRROR)
-    , ((modm .|. shiftMask, xK_y), sendMessage $ Toggle MIRROR)
+    , ((modm, xK_w), nextWS)
+    , ((modm .|. shiftMask, xK_w), shiftToNext >> nextWS)
+    , ((modm, xK_t), sendMessage $ Toggle FULL)
+    , ((modm .|. shiftMask, xK_t), sendMessage ToggleStruts)
+    , ((modm, xK_r), increaseLimit)
+    , ((modm .|. shiftMask, xK_r), decreaseLimit)
 
-    , ((modm, xK_h), sendMessage $ Go L)
-    , ((modm, xK_j), sendMessage $ Go D)
-    , ((modm, xK_k), sendMessage $ Go U)
-    , ((modm, xK_l), sendMessage $ Go R)
-    , ((modm .|. shiftMask, xK_h), sendMessage $ Swap L)
-    , ((modm .|. shiftMask, xK_j), sendMessage $ Swap D)
-    , ((modm .|. shiftMask, xK_k), sendMessage $ Swap U)
-    , ((modm .|. shiftMask, xK_l), sendMessage $ Swap R)
-
-    , ((modm, xK_n), sendMessage $ Toggle FULL)
-    , ((modm .|. shiftMask, xK_n), sendMessage ToggleStruts)
-    , ((modm, xK_m), increaseLimit)
-    , ((modm .|. shiftMask, xK_m), decreaseLimit)
+    , ((modm, xK_space), sendMessage NextLayout)
+    , ((modm, xK_BackSpace), spawn myLocker)
+    , ((modm, xK_period), gotoMenu >> windows W.swapMaster)
+    , ((modm, xK_comma), nextMatch History (return True))
     , ((modm .|. controlMask, xK_0), rescreen)
     , ((modm .|. mod1Mask, xK_0), rescreen)
-
-    , ((modm, xK_grave), goToSelected myGSConfig)
-    , ((modm .|. shiftMask, xK_grave), runOrRaisePrompt myXPConfig)
     , ((0, xK_Print), spawn myScreenshoter)
     , ((modm .|. controlMask .|. shiftMask, xK_Escape), confirmPrompt myXPConfig "LOGOUT" $ io (exitWith ExitSuccess)) -- xK_Caps_Lock
     , ((0, xF86XK_Sleep), spawn ("gksudo pm-suspend"))
     , ((shiftMask, xF86XK_Sleep), spawn ("gksudo pm-hibernate"))
-    ] ++ [
-    ((m .|. modm .|. controlMask, key), screenWorkspace sc >>= flip whenJust (windows . f)) | (key, sc) <- zip [xK_comma, xK_period] [0, 1],
-    (f, m) <- [(W.view, 0), (W.shift, shiftMask)]
-    ] ++ [
-    ((m .|. modm, key), windows $ f i) | (i, key) <- zip (XMonad.workspaces conf) ([xK_comma, xK_period]),
-    (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]
     ] ++ [
     ((modm, k), focusNth i) | (i, k) <- zip [0 .. 9] ([xK_1 .. xK_9]++[xK_0])
     ] ++ [
@@ -441,7 +352,6 @@ myStartupHook = do
     spawnOnce "pactl set-sink-volume 0 '10%'" -- volume
     spawnOnce "xfce4-panel" -- the panel
     spawnOnce "skype" -- keep in touch
-    -- spawnOnce "keynav" -- keyboard-driven mouse cursor mover
     -- spawnOnce "megasync" -- cloud storage
     spawnOnce "xautolock -time 5 -locker slock -nowlocker slock" -- autolocker
     spawnOnce "mpv /home/mw/MEGAsync/Music/login-sound/ubuntu11/desktop-login.ogg" -- login sound
