@@ -288,7 +288,6 @@ myManageHook = composeAll . concat $
       , isFullscreen --> doFullFloat
       , isDialog --> doCenterFloat
       , (resource =? "desktop_window") --> doIgnore
-      , (resource =? "desktop_window") --> doIgnore
       , (resource =? "dialog") --> doFloat
       , (resource =? "xfce4-panel") --> doFloat
       , (resource  =? "gcr-prompter") --> doCenterFloat
