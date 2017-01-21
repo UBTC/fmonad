@@ -128,6 +128,11 @@ myEditor2 = "kate"
 myEditor3 = "yi"
 myEditor4 = "geany"
 myEditor5 = "emacs"
+myReader0 = "evince"
+myReader1 = "okular"
+myReader2 = "zathura"
+myReader3 = "mupdf"
+myReader4 = "xpdf"
 myFileManager0 = "nautilus"
 myFileManager1 = "thunar"
 myFileManager2 = "dolphin"
@@ -161,10 +166,6 @@ myXPConfig = defaultXPConfig
     , height = myHeight
     , position = Top
     , promptBorderWidth = 0
-    , bgColor = colorDarkGray
-    , fgColor = colorGreen
-    , bgHLight = colorGreen
-    , fgHLight = colorDarkGray
     , historySize = 100
     , historyFilter = deleteConsecutive
     }
@@ -201,14 +202,12 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((shiftMask, xF86XK_MyComputer), spawn myFileManager0)
     , ((shiftMask, xF86XK_WWW), spawn myBrowser0)
 
-    , ((modm, xK_x), spawn myCLILauncher)
-    , ((modm .|. shiftMask, xK_x), spawn myGUILauncher)
-    , ((modm, xK_c), myCommands >>= runCommand)
-    , ((modm .|. shiftMask, xK_c), XMonad.kill)
-    , ((modm, xK_v), spawn myVolumeDecrease)
-    , ((modm .|. shiftMask, xK_v), spawn myVolumeIncrease)
-    , ((modm, xK_b), spawn myBrightDecrease)
-    , ((modm .|. shiftMask, xK_b), spawn myBrightIncrease)
+    , ((modm, xK_z), spawn myCLILauncher)
+    , ((modm .|. shiftMask, xK_z), spawn myGUILauncher)
+    , ((modm, xK_x), myCommands >>= runCommand)
+    , ((modm .|. shiftMask, xK_x), XMonad.kill)
+    , ((modm, xK_c), gotoMenu >> windows W.swapMaster)
+    , ((modm, xK_v), nextMatch History (return True))
 
     , ((0, xF86XK_ScreenSaver), spawn myLocker)
     , ((0, xF86XK_Eject), spawn "eject")
@@ -232,8 +231,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     , ((modm, xK_space), sendMessage NextLayout)
     , ((modm, xK_BackSpace), spawn myLocker)
-    , ((modm, xK_period), gotoMenu >> windows W.swapMaster)
-    , ((modm, xK_comma), nextMatch History (return True))
     , ((modm .|. controlMask, xK_0), rescreen)
     , ((modm .|. mod1Mask, xK_0), rescreen)
     , ((0, xK_Print), spawn myScreenshoter)
@@ -242,8 +239,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((shiftMask, xF86XK_Sleep), spawn ("gksudo pm-hibernate"))
     ] ++ [
     ((modm, k), focusNth i) | (i, k) <- zip [0 .. 9] ([xK_1 .. xK_9]++[xK_0])
-    ] ++ [
---  ((modm .|. shiftMask, k), swapNth i) | (i, k) <- zip [0 .. 9] ([xK_1 .. xK_9]++[xK_0])
+--  , ((modm .|. shiftMask, k), swapNth i) | (i, k) <- zip [0 .. 9] ([xK_1 .. xK_9]++[xK_0])
     ] ++ [
     ((modm .|. mod1Mask, k), layoutScreens 2 (Mirror (TwoPane (i/10) (1-i/10)))) | (i, k) <- zip [1 .. 9] [xK_1 .. xK_9]
     ] ++ [
@@ -292,8 +288,7 @@ myManageHook = composeAll . concat $
       , isFullscreen --> doFullFloat
       , isDialog --> doCenterFloat
       , (resource =? "desktop_window") --> doIgnore
-      , (resource =? "kdesktop") --> doIgnore
-      , (resource =? "xfdesktop") --> doIgnore
+      , (resource =? "desktop_window") --> doIgnore
       , (resource =? "dialog") --> doFloat
       , (resource =? "xfce4-panel") --> doFloat
       , (resource  =? "gcr-prompter") --> doCenterFloat
@@ -304,21 +299,9 @@ myManageHook = composeAll . concat $
       ]
     , [ (className =? cf) --> doCenterFloat | cf <- centerFloat]
     , [ (className =? sf) --> doFloat | sf <- simpleFloat]
---  , [ (className =? e) --> doShift "#0" | e <- editor]
---  , [ (className =? r) --> doShift "#0" | r <- reader]
---  , [ (className =? t) --> doShift "#0" | t <- terminal]
---  , [ (className =? f) --> doShift "#1" | f <- filemanager]
---  , [ (className =? b) --> doShift "#1" | b <- browser]
---  , [ (className =? p) --> doShift "#1" | p <- play]
     ] where
     simpleFloat = ["gtk-recordMyDesktop", "MPlayer", "gimp", "skype"]
     centerFloat = ["Xfce4-appfinder", "Xfrun4", "feh", "wrapper", "xmessage", "synaptic", "taffybar-linux-x86_64"]
---  browser = ["Firefox", "Midori", "Chromium Browser", "google-chrome", "Opera", "X-www-browser", "Tor Browser"]
---  editor = ["Gvim", "Emacs24", "Kate", "Gedit", "Geany", "Emacs", "Atom", "Neovim",  "Yi-linux-x86_64"]
---  filemanager = ["Spacefm", "Thunar", "Pcmanfm", "Nautilus", "Dolphin", "File"]
---  play = ["Rhythmbox","Gwibber", "Empathy", "Pidgin", "SuperTuxKart"] ++ simpleFloat
---  reader = ["Zathura", "Okular", "Evince", "mupdf", "xpdf"]
---  terminal = ["stterm-256color", "xterm", "Roxterm", "X-terminal-emulator", "Xfce4-terminal", "Lxterminal", "Gnome-terminal", "Konsole"]
 
 ------------------------------------------------------------------------
 --
@@ -352,7 +335,9 @@ myStartupHook = do
     spawnOnce "pactl set-sink-volume 0 '10%'" -- volume
     spawnOnce "xfce4-panel" -- the panel
     spawnOnce "skype" -- keep in touch
+    -- spawnOnce "keynav" -- keyboard-driven mouse cursor mover
     -- spawnOnce "megasync" -- cloud storage
+    -- spawnOnce "dropbox start" -- cloud storage
     spawnOnce "xautolock -time 5 -locker slock -nowlocker slock" -- autolocker
     spawnOnce "mpv /home/mw/MEGAsync/Music/login-sound/ubuntu11/desktop-login.ogg" -- login sound
     spawnOnce "mkdir -p ~/screenshots/"
@@ -363,7 +348,7 @@ myStartupHook = do
 ------------------------------------------------------------------------
 main = do
     xmonad $ ewmh desktopConfig
-        { terminal = "stterm"
+        { terminal = myTerminal0
         , focusFollowsMouse = myFocusFollowsMouse
         , borderWidth = myBorderWidth
         , modMask = myModMask
